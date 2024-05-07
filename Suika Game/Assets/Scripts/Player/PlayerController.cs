@@ -10,11 +10,11 @@ public class PlayerController : MonoBehaviour
 
     private Bounds _bounds;
 
-    private float _leftBound;
-    private float _rightBound;
+    private float _topBound;
+    private float _bottomBound;
 
-    private float _startingLeftBound;
-    private float _startingRightBound;
+    private float _startingTopBound;
+    private float _startingBottomBound;
 
     private float _offset;
 
@@ -22,29 +22,29 @@ public class PlayerController : MonoBehaviour
     {
         _bounds = _boundaries.bounds;
 
-        _offset = transform.position.x - _fruitThrowTransform.position.x;
+        _offset = transform.position.y - _fruitThrowTransform.position.y;
 
-        _leftBound = _bounds.min.x + _offset;
-        _rightBound = _bounds.max.x + _offset;
+        _bottomBound = _bounds.min.y + _offset;
+        _topBound = _bounds.max.y + _offset;
 
-        _startingLeftBound = _leftBound;
-        _startingRightBound = _rightBound;
+        _startingBottomBound = _bottomBound;
+        _startingTopBound = _topBound;
     }
 
     private void Update()
     {
-        Vector3 newPosition = transform.position + new Vector3(UserInput.MoveInput.x * _moveSpeed * Time.deltaTime, 0f, 0f);
-        newPosition.x = Mathf.Clamp(newPosition.x, _leftBound, _rightBound);
+        Vector3 newPosition = transform.position + new Vector3(0f, UserInput.MoveInput.y * _moveSpeed * Time.deltaTime, 0f);
+        newPosition.y = Mathf.Clamp(newPosition.y, _bottomBound, _topBound);
 
         transform.position = newPosition;
     }
 
-    public void ChangeBoundary(float extraWidth)
+    public void ChangeBoundary(float extraHeight)
     {
-        _leftBound = _startingLeftBound;
-        _rightBound = _startingRightBound;
+        _bottomBound = _startingBottomBound;
+        _topBound = _startingTopBound;
 
-        _leftBound += ThrowFruitController.instance.Bounds.extents.x + extraWidth;
-        _rightBound -= ThrowFruitController.instance.Bounds.extents.x + extraWidth;
+        _bottomBound += extraHeight; // Adjust these lines according to how you handle boundaries and inputs
+        _topBound -= extraHeight;
     }
 }

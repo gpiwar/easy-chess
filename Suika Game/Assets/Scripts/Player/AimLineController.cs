@@ -5,13 +5,14 @@ using UnityEngine;
 public class AimLineController : MonoBehaviour
 {
     [SerializeField] private Transform _fruitThrowTransform;
-    [SerializeField] private Transform _bottomTransform;
+    [SerializeField] private Transform _leftTransform;  // Adjusted from _bottomTransform to _leftTransform
+    [SerializeField] private Transform _rightTransform; // New Transform to define the right boundary
 
     private LineRenderer _lineRenderer;
 
-    private float _topPos;
-    private float _bottomPos;
-    private float _x;
+    private float _leftPos;
+    private float _rightPos;
+    private float _y;  // Now using y instead of x
 
     private void Awake()
     {
@@ -20,23 +21,23 @@ public class AimLineController : MonoBehaviour
 
     private void Update()
     {
-        _x = _fruitThrowTransform.position.x;
-        _topPos = _fruitThrowTransform.position.y;
-        _bottomPos = _bottomTransform.position.y;
+        _y = _fruitThrowTransform.position.y; // Constant y position
+        _leftPos = _leftTransform.position.x; // x-coordinate of the left end
+        _rightPos = _rightTransform.position.x; // x-coordinate of the right end
 
-        _lineRenderer.SetPosition(0, new Vector3(_x, _topPos));
-        _lineRenderer.SetPosition(1, new Vector3(_x, _bottomPos));
+        _lineRenderer.SetPosition(0, new Vector3(_leftPos, _y)); // Left endpoint of the line
+        _lineRenderer.SetPosition(1, new Vector3(_rightPos, _y)); // Right endpoint of the line
     }
 
     private void OnValidate()
     {
-        _lineRenderer = GetComponent<LineRenderer>();
+        if (!_lineRenderer) _lineRenderer = GetComponent<LineRenderer>();
 
-        _x = _fruitThrowTransform.position.x;
-        _topPos = _fruitThrowTransform.position.y;
-        _bottomPos = _bottomTransform.position.y;
+        _y = _fruitThrowTransform.position.y;
+        _leftPos = _leftTransform.position.x;
+        _rightPos = _rightTransform.position.x;
 
-        _lineRenderer.SetPosition(0, new Vector3(_x, _topPos));
-        _lineRenderer.SetPosition(1, new Vector3(_x, _bottomPos));
+        _lineRenderer.SetPosition(0, new Vector3(_leftPos, _y));
+        _lineRenderer.SetPosition(1, new Vector3(_rightPos, _y));
     }
 }
